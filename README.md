@@ -1,3 +1,29 @@
+### What is bitcoinj-multichain?
+
+This is an experimental patched version of BitcoinJ which allows BitcoinJ clients to access a MultiChain private blockchain.  The MultiChain network must be configured to behave like the public Bitcoin network.
+
+The following changes have been made:
+- Disabled max target verification on block headers
+- Disabled checkpoints
+- Added handling of 'getaddr' messages to avoid disconnection
+- Added subclass of MainNetParams called MultiChainParams which clients should use.
+- Modified wallettemplate so you can connect to a MultiChain node on localhost or remotely.
+
+When running the wallettemplate demo, set the following environment variables:
+- BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=<hash>
+- BITCOINJ_MULTICHAIN_DEMO_RAWHEX=<hexstring>
+- BITCOINJ_MULTICHAIN_DEMO_IP=127.0.0.1
+
+You can find the genesis block hash in params.dat or by calling:
+    multichain-cli NETWORKNAME getblockhash 0
+
+You can get the raw hex string of the genesis block by calling:
+    multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+
+
+### BitcoinJ README starts here:
+
+
 [![Build Status](https://travis-ci.org/bitcoinj/bitcoinj.png?branch=master)](https://travis-ci.org/bitcoinj/bitcoinj)   [![Coverage Status](https://coveralls.io/repos/bitcoinj/bitcoinj/badge.png?branch=master)](https://coveralls.io/r/bitcoinj/bitcoinj?branch=master) 
 
 [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.freenode.net/bitcoinj.png)](https://kiwiirc.com/client/irc.freenode.net/bitcoinj)

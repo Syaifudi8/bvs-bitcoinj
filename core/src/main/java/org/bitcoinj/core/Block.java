@@ -517,8 +517,14 @@ public class Block extends Message {
      */
     public BigInteger getDifficultyTargetAsInteger() throws VerificationException {
         BigInteger target = Utils.decodeCompactBits(difficultyTarget);
-        if (target.signum() <= 0 || target.compareTo(params.maxTarget) > 0)
+
+        // MULTICHAIN: START
+        // Ignore verification check for max target
+        //if (target.signum() <= 0 || target.compareTo(params.maxTarget) > 0)
+        if (target.signum() <= 0)
             throw new VerificationException("Difficulty target is bad: " + target.toString());
+        // MULTICHAIN: END
+
         return target;
     }
 

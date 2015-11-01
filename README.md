@@ -2,26 +2,57 @@
 
 This is an experimental patched version of BitcoinJ which allows BitcoinJ clients to access a MultiChain private blockchain.  The MultiChain network must be configured to behave like the public Bitcoin network.
 
-The following changes have been made:
-- Disabled max target verification on block headers
-- Disabled checkpoints
-- Added handling of 'getaddr' messages to avoid disconnection
-- Added subclass of MainNetParams called MultiChainParams which clients should use.
-- Modified wallettemplate so you can connect to a MultiChain node on localhost or remotely.
+In general, a Bitcoin client should:
+- Disable target verification
+- Disable checkpoints
+- Remove any hard-coded IP addresses of Bitcoin nodes
+- Remove any hard-coded data related to the Bitcoin Genesis block
 
-When running the wallettemplate demo, set the following environment variables:
-- BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=<hash>
-- BITCOINJ_MULTICHAIN_DEMO_RAWHEX=<hexstring>
-- BITCOINJ_MULTICHAIN_DEMO_IP=127.0.0.1
+With BitcoinJ, the following changes have been made:
+- Disable max target verification on block headers
+- Disable checkpoints
+- Added handling of 'getaddr' messages to avoid disconnection
+- Added subclass of MainNetParams called MultiChainParams which clients should use.  This subclass will:
+  - Create the MultiChain genesis block to replace the Bitcoin genesis block which BitcoinJ creates internally.
+  - Remove any DNS seeds
+  - Remove any hard-coded node addresses
+
+The WalletTemplate has been modified so it can connect to MultiChain over localhost or remotely.  Instead of creating MainNetParams, we now create a MultiChainParams object with data from the MultiChain network passed in via environment variables.
+
+Before running the wallettemplate demo, set the following environment variables:
+``` BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=00000038a4365db53d942612aace5e856ddc56aa4c1948b7dde599a64a3f2d88
+BITCOINJ_MULTICHAIN_DEMO_RAWHEX=01000000000000000000000000000000000000000000000000000000000000000000000079ef8132dc6c0ba651094a2e7cf1e623fff3111aac40cc892de8d4c4c75282b1bdef3356ffff001ed538a5000101000000010000000000000000000000000000000000000000000000000000000000000000ffffffff4d04ffff001e0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73ffffffff0100f2052a010000002321022c34a286f211c9c3fe3c61e1a132c0c244f0369c69487eee4647668149dc1086ac00000000
+BITCOINJ_MULTICHAIN_DEMO_IP=127.0.0.1
+```
 
 You can find the genesis block hash in params.dat or by calling:
-    multichain-cli NETWORKNAME getblockhash 0
+```
+	multichain-cli NETWORKNAME getblockhash 0
+```
 
 You can get the raw hex string of the genesis block by calling:
-    multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+```
+	multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+```
 
 
-### BitcoinJ README starts here:
+There is an example Multichain params.dat file in the repository:
+```
+	multichain_bitcoin.params.dat
+```
+
+You can use this file to create a MultiChain network which behaves like the Bitcoin network:
+```
+	multichain-util create bitcoin
+	cp multichain_bitcoin.params.dat ~/.multichain/bitcoin/params.dat
+```
+
+You can change how often blocks are created by editing the file and adjusting the parameters:
+- target-block-time
+- pow-minimum-bits
+
+
+### Original BitcoinJ README starts here:
 
 
 [![Build Status](https://travis-ci.org/bitcoinj/bitcoinj.png?branch=master)](https://travis-ci.org/bitcoinj/bitcoinj)   [![Coverage Status](https://coveralls.io/repos/bitcoinj/bitcoinj/badge.png?branch=master)](https://coveralls.io/r/bitcoinj/bitcoinj?branch=master) 

@@ -1,8 +1,10 @@
 package wallettemplate;
 
+import com.google.common.net.InetAddresses;
 import com.google.common.util.concurrent.*;
 import javafx.scene.input.*;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.PeerAddress;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.params.*;
 import org.bitcoinj.utils.BriefLogFormatter;
@@ -30,7 +32,19 @@ import static wallettemplate.utils.GuiUtils.*;
 public class Main extends Application {
     public static String APP_NAME = "WalletTemplate";
 
-    public static NetworkParameters params = MainNetParams.get();
+    // MULTICHAIN: START
+
+    // You can find the genesis block hash in params.dat or by calling:
+    // multichain-cli NETWORKNAME getblockhash 0
+    public static final String multichainGenesisBlockHash=System.getenv("BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH");
+
+    // You can get the raw hex string of the genesis block by calling:
+    // multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+    public static final String multichainGenesisBlockRawHex=System.getenv("BITCOINJ_MULTICHAIN_DEMO_RAWHEX");
+
+    public static NetworkParameters params = MultiChainParams.get(multichainGenesisBlockHash, multichainGenesisBlockRawHex);
+    // MULTICHAIN: END
+
     public static WalletAppKit bitcoin;
     public static Main instance;
 
@@ -131,6 +145,21 @@ public class Main extends Application {
             bitcoin.useTor();
             // bitcoin.setDiscovery(new HttpDiscovery(params, URI.create("http://localhost:8080/peers"), ECKey.fromPublicOnly(BaseEncoding.base16().decode("02cba68cfd0679d10b186288b75a59f9132b1b3e222f6332717cb8c4eb2040f940".toUpperCase()))));
         }
+        // MULTICHAIN: START
+        else if (params == MultiChainParams.get()) {
+            // Connect to Multichain running locally
+            /*
+            bitcoin.connectToLocalHost();
+             */
+
+            // Or connect to Multichain via IP address.
+            String ip = System.getenv("BITCOINJ_MULTICHAIN_DEMO_IP");
+            if (ip==null) ip = "127.0.0.1";
+            int port = 8333;
+            bitcoin.setPeerNodes( new PeerAddress(InetAddresses.forString(ip), port) );
+        }
+        // MULTICHAIN: END
+
         bitcoin.setDownloadListener(controller.progressBarUpdater())
                .setBlockingStartup(false)
                .setUserAgent(APP_NAME, "1.0");

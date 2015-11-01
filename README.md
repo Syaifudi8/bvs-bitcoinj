@@ -19,6 +19,29 @@ With BitcoinJ, the following changes have been made:
 
 The WalletTemplate has been modified so it can connect to MultiChain over localhost or remotely.  Instead of creating MainNetParams, we now create a MultiChainParams object with data from the MultiChain network passed in via environment variables.
 
+
+#### Build bitcoinj-multichain
+```
+	mvn clean install -DskipTests
+```
+
+#### Build wallet demo
+```
+	cd wallettemplate
+	mvn clean package -DskipTests
+```
+
+#### Run wallet demo
+
+Note you should set environment variables first (see below) before launching the wallet.
+```
+	java -jar target/wallettemplate-shaded.jar -Dorg.slf4j.simpleLogger.defaultLogLevel=debug 
+```
+
+Wallet files will be created in the local directory.
+
+#### Set environment variables for wallet demo
+
 Before running the wallettemplate demo, set the following environment variables:
 ```
 BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=...
@@ -36,13 +59,14 @@ You can get the raw hex string of the genesis block by calling:
 	multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
 ```
 
+#### Create a MultiChain network with Bitcoin behaviour
 
 There is an example Multichain params.dat file in the repository:
 ```
 	multichain_bitcoin.params.dat
 ```
 
-You can use this file to create a MultiChain network which behaves like the Bitcoin network:
+You can use this file to help create a MultiChain network which behaves like the Bitcoin network:
 ```
 	multichain-util create bitcoin
 	cp multichain_bitcoin.params.dat ~/.multichain/bitcoin/params.dat
@@ -51,6 +75,8 @@ You can use this file to create a MultiChain network which behaves like the Bitc
 You can change how often blocks are created by editing the file and adjusting the parameters:
 - target-block-time
 - pow-minimum-bits
+
+
 
 
 ### Original BitcoinJ README starts here:

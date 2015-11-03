@@ -1,6 +1,7 @@
 package org.bitcoinj.params;
 
 import org.bitcoinj.core.BitcoinSerializer;
+import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.Utils;
 import org.bitcoinj.net.discovery.HttpDiscovery;
@@ -25,8 +26,9 @@ public class MultiChainParams extends MainNetParams {
         // Create a copy of the Multichain network's genesis block and over-write the BitcoinJ created genesis block.
         byte[] payload = Utils.HEX.decode(rawHex);
         Context context = new Context(this);
-        BitcoinSerializer bs = this.getSerializer(true);
-        this.genesisBlock = bs.makeBlock(payload);
+        this.genesisBlock = new Block(this, payload);       // Okay on 0.13.3
+//        BitcoinSerializer bs = this.getSerializer(true);  // Needs 0.14
+//        this.genesisBlock = bs.makeBlock(payload);        // Needs 0.14
         String genesisHash = genesisBlock.getHashAsString();
         checkState(genesisHash.equals(blockHash),genesisHash);
     }

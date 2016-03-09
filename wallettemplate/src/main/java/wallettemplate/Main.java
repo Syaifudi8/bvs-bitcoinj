@@ -39,7 +39,7 @@ public class Main extends Application {
     public static final String multichainGenesisBlockHash=System.getenv("BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH");
 
     // You can get the raw hex string of the genesis block by calling:
-    // multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+    // multichain-cli NETWORKNAME getblock GENESISBLOCKHASH false
     public static final String multichainGenesisBlockRawHex=System.getenv("BITCOINJ_MULTICHAIN_DEMO_RAWHEX");
 
     public static NetworkParameters params = MultiChainParams.get(multichainGenesisBlockHash, multichainGenesisBlockRawHex);

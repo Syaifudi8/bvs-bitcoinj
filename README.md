@@ -56,7 +56,7 @@ You can find the genesis block hash in params.dat or by calling:
 
 You can get the raw hex string of the genesis block by calling:
 ```
-	multichain-cli NETWORKNAME getrawtransaction GENESISBLOCKHASH false
+	multichain-cli NETWORKNAME getblock GENESISBLOCKHASH false
 ```
 
 #### Create a MultiChain network with Bitcoin behaviour

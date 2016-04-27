@@ -1,6 +1,6 @@
 ### What is bitcoinj-multichain?
 
-This is an experimental patched version of BitcoinJ which allows BitcoinJ clients to access a MultiChain private blockchain.  The MultiChain network must be configured to behave like the public Bitcoin network.
+This is an experimental patched version of BitcoinJ which allows BitcoinJ clients to access a MultiChain private blockchain.  The MultiChain network must be configured to behave like the public Bitcoin network (since BitcoinJ does not support MultiChain assets and permissions).
 
 In general, a Bitcoin client should:
 - Disable target verification
@@ -21,6 +21,8 @@ The WalletTemplate has been modified so it can connect to MultiChain over localh
 
 
 #### Build bitcoinj-multichain
+
+Using Java 8:
 ```
 	mvn clean install -DskipTests
 ```
@@ -44,19 +46,19 @@ Wallet files will be created in the local directory.
 
 Before running the wallettemplate demo, set the following environment variables:
 ```
-BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=...
-BITCOINJ_MULTICHAIN_DEMO_RAWHEX=...
-BITCOINJ_MULTICHAIN_DEMO_IP=127.0.0.1
+export BITCOINJ_MULTICHAIN_DEMO_IP=127.0.0.1
+export BITCOINJ_MULTICHAIN_DEMO_BLOCKHASH=...
+export BITCOINJ_MULTICHAIN_DEMO_RAWHEX=...
 ```
 
-You can find the genesis block hash in params.dat or by calling:
+Where you can get the genesis block hash in params.dat or by calling:
 ```
-	multichain-cli NETWORKNAME getblockhash 0
+	multichain-cli <name_of_chain> getblockhash 0
 ```
 
-You can get the raw hex string of the genesis block by calling:
+You can get the raw hex data string of the genesis block by calling:
 ```
-	multichain-cli NETWORKNAME getblock GENESISBLOCKHASH false
+	multichain-cli <name_of_chain> getblock <genesis_block_hash> false
 ```
 
 #### Create a MultiChain network with Bitcoin behaviour

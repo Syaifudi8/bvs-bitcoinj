@@ -30,7 +30,7 @@ import java.net.URL;
 import static wallettemplate.utils.GuiUtils.*;
 
 public class Main extends Application {
-    public static String APP_NAME = "WalletTemplate";
+    public static String APP_NAME = "BlockchainVotingClient";
 
     // MULTICHAIN: START
 
